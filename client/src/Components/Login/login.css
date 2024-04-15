@@ -1,0 +1,17 @@
+.hideMessage {
+  display: none;
+}
+
+.showMessage {
+  display: block;
+  color: var(-- whiteColor);
+  padding: 10px;
+  background: 255, 0, 0;
+  border-radius: 13px;
+  text-align: center;
+}
+
+body {
+  background-color: aqua;
+}/*# sourceMappingURL=login.css.map */
+

@@ -1,0 +1,55 @@
+import { useEffect, useState } from 'react';
+import './login.css';
+import '../../App.css';
+import { Link, useNavigate } from 'react-router-dom';
+import Axios from 'axios';
+
+const Login = () => {
+  const [loginUserName, setLoginUserName] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const navigateTo = useNavigate();
+
+  const [loginStatus, setLoginStatus] = useState('');
+  const [statusHolder, setStatusHolder] = useState('hideMessage');
+
+  const loginUser = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await Axios.post('http://localhost:3000/login', {
+        LoginUserName: loginUserName,
+        LoginPassword: loginPassword
+      });
+
+
+
+
+      if (response.data.message || loginUserName === '' || loginPassword === '') {
+        setLoginStatus('Credentials Don\'t Exist');
+        setStatusHolder('showMessage');
+        setTimeout(() => {
+          setStatusHolder('hideMessage');
+        }, 4000);
+      } else {
+        // Save session data to local storage
+        localStorage.setItem('isLoggedIn', 'true');
+        navigateTo('/dashboard');
+      }
+    } catch (error) {
+      console.error('Login failed:', error);
+      // Handle login failure
+      setLoginStatus('Login failed. Please try again.');
+      setStatusHolder('showMessage');
+      setTimeout(() => {
+        setStatusHolder('hideMessage');
+      }, 4000);
+    }
+  };
+
+  useEffect(() => {
+    // Check if user is already logged in
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if (isLoggedIn) {
+      navigateTo('/dashboard');
+    }
+  }, []);
