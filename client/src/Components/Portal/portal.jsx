@@ -1,7 +1,6 @@
 import {useState} from 'react'
 
 
-
 const portal = () => {
 
   const [thing, thingsetter] = useState("");
