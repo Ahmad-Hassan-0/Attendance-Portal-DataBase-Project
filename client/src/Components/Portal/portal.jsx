@@ -1,13 +1,12 @@
-import {useState} from 'react'
-
+//import {useState} from 'react'
 
 const portal = () => {
 
-  const [thing, thingsetter] = useState("");
+//  const [thing, thingsetter] = useState("");
 
   return (
     <div>
-      this is the portal
+      this is the portals
     </div>
   )
 }
