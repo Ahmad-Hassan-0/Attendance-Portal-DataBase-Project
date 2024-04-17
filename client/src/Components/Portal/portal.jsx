@@ -35,16 +35,22 @@ const [rowData, setRowData] = useState([]);
 
 const [colDefs, setColDefs] = useState([
 
-  { headerName: "Name", field: "Name", flex: 1, headerCheckboxSelection: true,
-  checkboxSelection: true,
-   suppressMenu: true,
-   suppressSorting: true
+  // column 1
+  { headerName: "Name", field: "Name", 
+    headerCheckboxSelection: true,
+    checkboxSelection: true,
+    suppressMenu: true,
+    suppressSorting: true
 },
 
-  { headerName: "Status", field: "Status", filter:true, flex: 1 },
+  //column 2
+  { headerName: "Status", field: "Status",
+   filter:true, flex: 1 },
   
+   //column 3
   { headerName: "Registration ID", field: "Reg_Id", filter:true, flex: 1 },
   
+  //column 4
   { headerName: "Attendance %", 
     field: "percentage", 
  //  valueFormatter: params => { return params.value.toLocaleString() + " %"; },
@@ -62,8 +68,11 @@ const [colDefs, setColDefs] = useState([
    </>
   },
 
-  { headerName: "Semester", field: "semester" , flex: 1},
-  { headerName: "Request Status",field: "reqStatus", flex: 1, cellRenderer: CompanyLogoRenderer
+  //column 5
+  { headerName: "Semester", field: "semester"},
+  
+  //column 6
+  { headerName: "Request Status",field: "reqStatus", cellRenderer: CompanyLogoRenderer
 },
 ]);
 
@@ -72,7 +81,10 @@ const [colDefs, setColDefs] = useState([
 const defaultColDef = {
     flex:1,
     resizable: false,
-    editable: false
+    editable: false,
+    sortable: true,
+    filter: true,
+    lockPosition: true
 };
 
 // getting the data from the server
