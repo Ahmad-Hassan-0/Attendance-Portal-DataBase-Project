@@ -6,11 +6,8 @@ const cors = require('cors')
 
 app.use(express.json())
 app.use(cors())
-// running the server
 
 const port = 3000;
-
-// creating database
 
 const db = mysql.createConnection({
     user: 'root',
@@ -25,8 +22,6 @@ app.get('/',
   } 
 );
 
-
-// for register
 app.post('/register', (req, res) => {
     const setEmail = req.body.Email
     const setUsername = req.body.UserName
@@ -77,6 +72,39 @@ app.post('/login', (req, res) => {
   })
 }
 )
+
+
+app.get('/dashboard', (req, res) => {
+  const query = 'SELECT * FROM atten';
+  db.query(query, (error, results) => {
+    res.json(results);
+    console.log(results)
+  });
+});
+
+
+// connection.connect((err) => {
+//   if (err) {
+//       console.error('Error connecting to database:', err);
+//       return;
+//   }
+//   console.log('Connected to MySQL database');
+// });
+
+// // Route to get table list
+// app.get('/dashboard', (req, res) => {
+//   const query = 'SELECT * FROM login';
+//   connection.query(query, (error, results) => {
+//       if (error) {
+//           console.error('Error retrieving data from database:', error);
+//           res.status(500).json({ error: 'Internal server error' });
+//           return;
+//       }
+//       res.json(results);
+//       console.log(results);
+//   });
+// });
+
 
 
 app.listen(port, ()=> {

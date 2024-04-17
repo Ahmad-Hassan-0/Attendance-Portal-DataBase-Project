@@ -1,10 +1,6 @@
-.rag-red {
-  background-color: rgba(204, 34, 34, 0.2666666667);
-}
-
 .ag-theme-quartz {
-  height: 700px;
-  width: 90%;
+  height: 100vw;
+  width: 100%;
 }
 .ag-theme-quartz .ag-header {
   background-color: #f0f0f0;
@@ -13,8 +9,28 @@
 }
 .ag-theme-quartz .ag-cell {
   border: 0 solid #ccc;
-  width: auto;
-  width: -moz-fit-content;
-  width: fit-content;
-  width: 12px;
+  width: 1px;
+}
+
+.rejected-red-dot {
+  background-color: red;
+}
+
+.live-blue-dot {
+  background-color: blue;
+}
+
+.accepted-green-dot {
+  background-color: rgb(22, 146, 32);
+}
+
+.none-grey-dot, .grey-dot {
+  background-color: rgb(184, 184, 184);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
 }/*# sourceMappingURL=portal.css.map */

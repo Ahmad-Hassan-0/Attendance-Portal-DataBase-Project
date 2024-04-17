@@ -96,7 +96,6 @@ const login = () => {
             <input type='password' id='password' placeholder='Enter pass' onChange={(event) => {
               setLoginPassword(event.target.value)
             }}/>
-
           </div>
         </div>
 
