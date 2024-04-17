@@ -4,12 +4,12 @@ import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the 
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 import './portal.css'
 import PropTypes from 'prop-types';
-import Axios from 'axios'
+//import Axios from 'axios'
 
 const portal = () => {
   
 // if conditions
-const CompanyLogoRenderer = ({ value }) => {
+const StatusRenderer = ({ value }) => {
   let dotClass;
   if (value === 'none') {
     dotClass = 'none-grey-dot';
@@ -17,7 +17,7 @@ const CompanyLogoRenderer = ({ value }) => {
     dotClass = 'live-blue-dot';
   } else if (value === 'accepted') {
     dotClass = 'accepted-green-dot';
-  } else if (value === 'Rejected') {
+  } else if (value === 'rejected') {
     dotClass = 'rejected-red-dot';
   } else {
     dotClass = 'grey-dot';
@@ -25,7 +25,7 @@ const CompanyLogoRenderer = ({ value }) => {
   return <span className={`dot ${dotClass}`}></span>;
 };
 
-CompanyLogoRenderer.propTypes = {
+StatusRenderer.propTypes = {
   value: PropTypes.string.isRequired
 };
 
@@ -38,17 +38,19 @@ const [colDefs, setColDefs] = useState([
   // column 1
   { headerName: "Name", field: "Name", 
     headerCheckboxSelection: true,
-    checkboxSelection: true,
-    suppressMenu: true,
-    suppressSorting: true
+    checkboxSelection: true
 },
 
   //column 2
-  { headerName: "Status", field: "Status",
-   filter:true, flex: 1 },
+  { headerName: "Status", field: "Status", 
+  
+  
+  
+  
+  },
   
    //column 3
-  { headerName: "Registration ID", field: "Reg_Id", filter:true, flex: 1 },
+  { headerName: "Registration ID", field: "Reg_Id" },
   
   //column 4
   { headerName: "Attendance %", 
@@ -56,9 +58,9 @@ const [colDefs, setColDefs] = useState([
  //  valueFormatter: params => { return params.value.toLocaleString() + " %"; },
     flex: 1,
     cellStyle: params => {
-      if (params.value == 8) {
+      if (params.value == 100) {
         return { color: 'green' };
-      } else if (params.value <= 15) {
+      } else if (params.value <= 75) {
         return { color: 'red' };
       } else {
         return { color: 'black' };
@@ -72,7 +74,7 @@ const [colDefs, setColDefs] = useState([
   { headerName: "Semester", field: "semester"},
   
   //column 6
-  { headerName: "Request Status",field: "reqStatus", cellRenderer: CompanyLogoRenderer
+  { headerName: "Request Status",field: "reqStatus", cellRenderer: StatusRenderer
 },
 ]);
 
@@ -85,6 +87,7 @@ const defaultColDef = {
     sortable: true,
     filter: true,
     lockPosition: true
+  
 };
 
 // getting the data from the server
@@ -104,6 +107,11 @@ useEffect(() => {
         columnDefs={colDefs}
         rowData={rowData}
         //pagination={true}
+
+        class="ag-theme-balham"
+        gridReady="onGridReady($event)"
+        selectionChanged="onSelectionChanged()"
+        rowSelection="multiple"
    />
    
     </div>

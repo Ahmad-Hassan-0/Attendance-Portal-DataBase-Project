@@ -18,5 +18,6 @@ module.exports = {
       { allowConstantExport: true },
     ],
     'react-hooks/rules-of-hooks': 'off', 
+    "no-unused-vars": "off"
   },
 };
