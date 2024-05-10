@@ -8,6 +8,7 @@ const register = () =>{
 
   const [email, setEmail] = useState('');
   const [userName, setUserName] = useState('');
+  const [userRegId, setRegId] = useState('');
   const [password, setPassword] = useState('');
   const navigateTo = useNavigate()
 
@@ -18,10 +19,10 @@ const register = () =>{
       Email: email,
       UserName: userName,
       Password: password,
+      UserRegId: userRegId
     }).then(()=>{
 
         console.log('The user has Successfully Registered')
-
         setTimeout(() => {
           navigateTo('/')
         }, 200);
@@ -32,6 +33,7 @@ const register = () =>{
         setEmail('')
         setUserName('')
         setPassword('')
+        setRegId('')
     })
   }
 
@@ -59,6 +61,18 @@ const register = () =>{
               {/*Also add icon here*/}
             <input type='text' id='username' placeholder='Enter username'  onChange={(event) => {
               setUserName(event.target.value)
+            }}
+            
+            />
+          </div>
+        </div>
+
+        <div className='inputdiv'>
+          <label htmlFor="RegId"> RegId</label>
+            <div className='inputFlex'>
+              {/*Also add icon here*/}
+            <input type='text' id='regId' placeholder='Enter RegId'  onChange={(event) => {
+              setRegId(event.target.value)
             }}
             
             />

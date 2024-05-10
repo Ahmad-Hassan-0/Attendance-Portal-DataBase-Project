@@ -4,8 +4,10 @@ import '../../App.css'
 import {Link, useNavigate} from 'react-router-dom'
 import Axios from 'axios'
 
-const login = () => {
 
+const login = () => {
+  
+  const [current_th_regId, set_current_th_regId] = useState([]);
   const [loginUserName, setLoginUserName] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const navigateTo = useNavigate()
@@ -38,8 +40,11 @@ const login = () => {
         console.log('Credentials Don\'t Exist')
       }
       else{
+         set_current_th_regId(responce)
+        console.log(responce)
+        console.log("yesBro")
        // localStorage.setItem('isLoggedIn', 'true');
-        navigateTo('/dashboard') // if credentails match
+      //  navigateTo('/dashboard') // if credentails match
       }
   })
 
