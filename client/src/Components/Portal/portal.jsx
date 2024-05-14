@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
@@ -9,22 +8,55 @@ import LoginPage from '../Login/login.jsx';
 
 
 
+
 const Portal = () => {
 
-  //
+
+  const [requestStatusVar, setReqStatusVar] = useState('');
+  const ReqStatusRenderer = ({ value }) => {
+    let dotClass;
+    setReqStatusVar(value)
+    console.log(value)
+    console.log("lag gyae");
+    if (value === 'none') {
+      dotClass = 'none-grey-dot';
+    } else if (value === 'Live') {
+      dotClass = 'live-blue-dot';
+    } else if (value === 'Approved') {
+      dotClass = 'accepted-green-dot';
+    } else if (value === 'Rejected') {
+      dotClass = 'rejected-red-dot';
+    } else {
+      dotClass = 'grey-dot';
+    }
+    return <span className={`dot ${dotClass}`}></span>;
+  };
+
   var course_id = sessionStorage.getItem('CourseId');
   course_id = "CSE101";
   var type = sessionStorage.getItem('type'); // makeup or regular
   type = "Regular"
  // const course_id = sessionStorage.getItem('CourseId');
   //
+
   const [rowData, setRowData] = useState([]);
   const [colDefs, setColDefs] = useState([
     { headerName: 'Name', field: 'stu_name', headerCheckboxSelection: true, checkboxSelection: true },
     { headerName: 'Status', field: 'requestStatus', cellRenderer: StatusRenderer },
     { headerName: 'Registration ID', field: 'stuRegIds' },
-    { headerName: 'Attendance', field: 'attendance_percentage', cellStyle: getPercentageCellStyle, cellRenderer: PercentageRenderer },
-    { headerName: 'Semester', field: 'semester' },
+    { headerName: 'Attendance%', field: 'attendance_percentage', flex: 1,
+    cellStyle: params => {
+      if (params.value == 100) {
+        return { color: 'green' };
+      } else if (params.value <= 75) {
+        return { color: 'red' };
+      } else {
+        return { color: 'black' };
+      }
+    }
+   ,cellRenderer: p => <> {p.value}<span style={{ color: 'rgb(184, 184, 184)' }}>%</span>
+   </> },
+    { headerName: 'Semester', field: 'semester', cellRenderer: semesterRendere },
     { headerName: 'Request Status', field: 'requestStatus', cellRenderer: ReqStatusRenderer },
     { headerName: "LeaveId", field: "leave_id", hide: true,suppressToolPanel: true
    }
@@ -32,128 +64,25 @@ const Portal = () => {
 
   const gridRef = useRef();
 
-  // const exportTableAsCsv = () => {
-  //   const selectedRows = gridRef.current.api.getSelectedRows();
-  //   gridRef.current.api.exportDataAsCsv({ allColumns: true, onlySelected: true, skipHeader: false, fileName: 'export.csv' });
-  // };
-
-  /*
-  // Method to download CSV
-  const exportTableAsCsv = () => {
-    // Create a new array to store the data for exporting
-    const exportData = [];
-
-    // const columnHeaders = gridRef.current.api.getColumnDefs().map(col => col.headerName);
-    // exportData.push(columnHeaders);
-
-    gridRef.current.api.forEachNode(node => {
-
-      const isSelected = node.isSelected() ? 1 : 0;
-      
-      const th_regId = sessionStorage.getItem('LoggedUserId');
-      console.log(th_regId);
-      // Get the data for the current row
-      const rowData = node.data;
-      
-      // Add a new property to the row data indicating the selection status
-      const rowDataWithSelection = { ...rowData, isSelected , th_regId };
-      
-      // Add the modified row data to the export data array
-      exportData.push(rowDataWithSelection);
-    });
-  
-    // Convert exportData to CSV format
-    const csvData = exportData.map(row => Object.values(row).join(',')).join('\n');
-    
-    // Create a hidden anchor element to trigger the download
-    const hiddenElement = document.createElement('a');
-    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvData);
-    hiddenElement.target = '_blank';
-    hiddenElement.download = 'export.csv';
-    hiddenElement.click();
-  };
-  */
-  //////////////////////////////
-  
- const exportTableAsCsv = () => {
-   // Create a new array to store the data for exporting
-   const exportData = [];
-
-   // const columnHeaders = gridRef.current.api.getColumnDefs().map(col => col.headerName);
-   // exportData.push(columnHeaders);
-   const th_regId = sessionStorage.getItem('LoggedUserId');
-
-   var datetime = new Date();
-   //console.log(datetime);
-   var date = datetime.toISOString().slice(0,10);
-   var time = datetime.toISOString().slice(11,19);
-
-
-   gridRef.current.api.forEachNode(node => {
-      const isSelected = node.isSelected() ? 1 : 0;
-      const rowData = node.data;
-      const rowDataWithSelection = { ...rowData, isSelected, th_regId, date, time };
-      exportData.push(rowDataWithSelection);
-    });
-
-    // Convert exportData to CSV format
-    const csvData = exportData.map(row => Object.values(row).join(',')).join('\n');
-    
-    // Make a POST request to the server
-    fetch('http://localhost:3000/dashboard', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'text/csv'
-      },
-      body: csvData
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to upload CSV data');
-      }
-      // Handle successful response
-      console.log('CSV data uploaded successfully');
-    })
-    .catch(error => {
-      // Handle error
-      console.error('Error uploading CSV data:', error);
-    });
-  };
-  
-
   /////////////////////////////////////////////////////
 
   const exportTableAsJson = () => {
-    // Create a new array to store the data for exporting
+
     const exportData = [];
   
-    // Get the logged user ID from session storage
     const th_regId = sessionStorage.getItem('LoggedUserId');
   
-    // Get the current date and time
     const datetime = new Date();
     const date = datetime.toISOString().slice(0, 10);
     const time = datetime.toISOString().slice(11, 19);
   
-    // Iterate over each row in the grid and collect the data
-
     gridRef.current.api.forEachNode(node => {
       const isSelected = node.isSelected() ? 'Present' : 'Absent';
       const rowData = node.data;
   
-      // Specify only the desired fields from rowData
-      const { requestStatus, stuRegIds, leave_id } = rowData;
+        const { requestStatus, stuRegIds, leave_id } = rowData;
   
-      // Create an object with selected variables
-      const rowDataWithVariables = {
-        course_id,
-        th_regId,
-        isSelected,
-        date,
-        time,
-        type,
-        stuRegIds,
-        leave_id
+      const rowDataWithVariables = {course_id, th_regId, isSelected, date, time, type, stuRegIds, leave_id
       };
   
       exportData.push(rowDataWithVariables);
@@ -179,8 +108,6 @@ const Portal = () => {
       console.error('Error uploading JSON data:', error);
     });
   };
-  
-
 
 ///////////////////////////////////////////////////////
   const defaultColDef = {
@@ -227,7 +154,6 @@ const Portal = () => {
 
   return (
     <div className="ag-theme-quartz">
-      <button onClick={exportTableAsCsv}>Export as CSV</button>
       <button onClick={exportTableAsJson}>exportTableAsJson</button>
       <AgGridReact
        ref={gridRef}
@@ -241,6 +167,7 @@ const Portal = () => {
       />
     </div>
   );
+
 };
 
 const StatusRenderer = ({ value }) => {
@@ -248,22 +175,20 @@ const StatusRenderer = ({ value }) => {
   return <span>{value}</span>;
 };
 
-const ReqStatusRenderer = ({ value }) => {
-  // Custom logic for rendering request status
-  return <span>{value}</span>;
+const semesterRendere = ({ value }) => {
+  var temp = "WTF";
+
+  if(value === 1) temp = "I";
+  else if(value == 2) temp = "II";
+  else if(value == 3) temp = "III";
+  else if(value == 4) temp = "IV";
+  else if(value == 5) temp = "V";
+  else if(value == 6) temp = "VI";
+  else if(value == 7) temp = "VII";
+  else if(value == 8) temp = "VIII";
+  return <span>{temp}</span>;
 };
 
-const PercentageRenderer = ({ value }) => {
-  // Custom logic for rendering percentage
-  return <span>{value}</span>;
-};
-
-const getPercentageCellStyle = (params) => {
-  // Custom cell style logic for percentage column
-  return {
-    color: params.value === 100 ? 'green' : params.value <= 75 ? 'red' : 'black',
-  };
-};
 
 Portal.propTypes = {
   // Define PropTypes if needed
@@ -273,12 +198,5 @@ StatusRenderer.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
-ReqStatusRenderer.propTypes = {
-  value: PropTypes.string.isRequired,
-};
-
-PercentageRenderer.propTypes = {
-  value: PropTypes.number.isRequired,
-};
 
 export default Portal;
