@@ -16,7 +16,7 @@ const port = 3000;
 const db = mysql.createConnection({
     user: 'root',
     host: 'localhost',
-    password: '',
+    password: '', 
     database: 'air_attendance_portal_byted',
 })
 
@@ -25,8 +25,6 @@ app.get('/',
     res.send(' <h1> This is the server <h1>');
   } 
 );
-
-
 
 app.post('/register', (req, res) => {
     const setEmail = req.body.Email
@@ -39,6 +37,7 @@ app.post('/register', (req, res) => {
     console.log(Values);
 
     const SQL = 'INSERT INTO login(th_regId, l_username, l_password, l_recmail) VALUES (?,?,?,?)'
+
 
     db.query(SQL, Values, (err, result)=>{
       if(err){
@@ -71,7 +70,6 @@ app.post('/login', (req, res) => {
 
 
     if(result.length > 0){
-      
       res.send(result)
       console.log('user logged')
     }
@@ -86,7 +84,34 @@ app.post('/login', (req, res) => {
 // send
 app.get('/dashboard', (req, res) => {
   const query = 'SELECT * FROM atten';
-  db.query(query, (error, results) => {
+  
+  const query1 = `
+  SELECT 
+  students.stu_name, 
+  sub_query.IDs AS stuRegIds, 
+  sub_query.attendance_percentage, 
+  2026 - students.stu_batch AS semester, 
+  sub_query.RQs AS requestStatus,
+  lids AS leave_id
+FROM students
+LEFT JOIN (
+  -- Subquery to get IDs, attendance_percentage, and RQs-- 
+  SELECT 
+      studentregisteredcourses.stu_regId AS IDs,
+      (COALESCE(studentregisteredcourses.src_totalPresent, 0) / 24) * 100 AS attendance_percentage, 
+      COALESCE(leave_application.request_status, 'No Request') AS RQs,
+  COALESCE(leave_application.leave_id) AS lids
+  FROM studentregisteredcourses
+  INNER JOIN students ON studentregisteredcourses.stu_regId = students.stu_regId
+  LEFT JOIN leave_application ON students.stu_regId = leave_application.stu_regId
+      AND leave_application.leave_date = '2024-05-30'
+  WHERE studentregisteredcourses.course_id = 'CSE101'
+) AS sub_query ON students.stu_regId = sub_query.IDs
+WHERE sub_query.IDs IS NOT NULL; -- Filter out students not enrolled in the course
+`;
+
+
+  db.query(query1, (error, results) => {
     res.json(results);
     console.log("dataSEnt")
   });
@@ -94,47 +119,58 @@ app.get('/dashboard', (req, res) => {
 
 ///////////////////////////////////////
 
-// into the Attendance table
-// app.post('/dashboard', (req, res) => {
+//into the Attendance table
+/*
 
-//   const csvData = req.body;
-//   const valuesArray = [];
-//   //console.log('Received CSV data:', csvData);
+app.post('/dashboard', (req, res) => {
 
-//   const SQL = 'INSERT INTO attendance(att_id, course_id, th_regid, att_status, att_date, att_timerecorded, att_type, stu_regId) VALUES (?,?,?,?,?,?,?,?)'
+  const csvData = req.body;
+  const valuesArray = [];
+  //console.log('Received CSV data:', csvData);
 
-//   fs.createReadStream(csvData)
-//   .pipe(csv())
-//   .on('data', (row) => {
-//     // Extract values from the CSV row and push them into the values array
-//     const values = [
-//       row.att_id,
-//       row.course_id,
-//       row.att_status,
-//       row.att_date,
-//       row.att_timerecorded,
-//       row.att_type,
-//       row.stu_regId
-//     ];
-//     valuesArray.push(values);
-//   })
-//   .on('end', () => {
-//     // All data has been read from the CSV
-//     console.log('Values extracted from CSV:', valuesArray);
-//     // Here you can execute your SQL query using the valuesArray
-//     // For example:
-//     // db.query(SQL, [valuesArray], (err, result) => {
-//     //   if (err) throw err;
-//     //   console.log('Inserted rows:', result.affectedRows);
-//     // });
-// });
+  const SQL = 'INSERT INTO attendance(att_id, course_id, th_regid, att_status, att_date, att_timerecorded, att_type, stu_regId) VALUES (?,?,?,?,?,?,?,?)'
 
-//   res.send('CSV data received');
+  fs.createReadStream(csvData)
+  .pipe(csv())
+  .on('data', (row) => {
+    // Extract values from the CSV row and push them into the values array
+    const values = [
+      row.att_id,
+      row.course_id,
+      row.att_status,
+      row.att_date,
+      row.att_timerecorded,
+      row.att_type,
+      row.stu_regId
+    ];
+    valuesArray.push(values);
+  })
+  .on('end', () => {
+    // All data has been read from the CSV
+    console.log('Values extracted from CSV:', valuesArray);
+    // Here you can execute your SQL query using the valuesArray
+    // For example:
+    // db.query(SQL, [valuesArray], (err, result) => {
+    //   if (err) throw err;
+    //   console.log('Inserted rows:', result.affectedRows);
+    // });
+});
 
-// });
+  res.send('CSV data received');
+
+});
+*/
+
+app.post('/dashboard', (req,res) =>{
+    
+  console.log(req.body);
+}
+)
+
 
 app.post('/dashboard', (req, res) => {
   // Initialize an array to store the selected columns from the CSV
+  console.log(req.body);
   const valuesArray = [];
 
   // Read the CSV data from the request body
@@ -210,7 +246,6 @@ app.post('/dashboard', (req, res) => {
 //       console.log(results);
 //   });
 // });
-
 
 
 app.listen(port, ()=> {

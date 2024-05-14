@@ -32,19 +32,16 @@ const login = () => {
       // index.js:  75. 'res.send({message: 'Credentials Dont Match'})'
     
       if(responce.data.message || loginUserName == '' || loginPassword == ''){
-        navigateTo('/') // if credentails dont match
-        //const errorMessage = 'Credentials Don\'t Exist' + new Date().toISOString(); // Add current time to error message
+        navigateTo('/')
         setAttempt(new Date().toISOString())
-        // setLoginStatus(errorMessage);
         setLoginStatus('Credentials Don\'t Exist')
         console.log('Credentials Don\'t Exist')
       }
       else{
-         set_current_th_regId(responce)
-        console.log(responce)
-        console.log("yesBro")
-       // localStorage.setItem('isLoggedIn', 'true');
-      //  navigateTo('/dashboard') // if credentails match
+        const th_regId = responce.data[0].th_regId;
+        sessionStorage.setItem('isLoggedIn', 'true');
+        sessionStorage.setItem('LoggedUserId', th_regId);
+        navigateTo('/dashboard') // if credentails match
       }
   })
 
