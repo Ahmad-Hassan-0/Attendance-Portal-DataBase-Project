@@ -7,10 +7,7 @@ import PropTypes from 'prop-types';
 import LoginPage from '../Login/login.jsx';
 
 
-
-
 const Portal = () => {
-
 
   const [requestStatusVar, setReqStatusVar] = useState('');
   const ReqStatusRenderer = ({ value }) => {
@@ -44,7 +41,7 @@ const Portal = () => {
     { headerName: 'Name', field: 'stu_name', headerCheckboxSelection: true, checkboxSelection: true },
     { headerName: 'Status', field: 'requestStatus', cellRenderer: StatusRenderer },
     { headerName: 'Registration ID', field: 'stuRegIds' },
-    { headerName: 'Attendance%', field: 'attendance_percentage', flex: 1,
+    { headerName: 'Attendance%', field: 'attendance_percentage',
     cellStyle: params => {
       if (params.value == 100) {
         return { color: 'green' };
@@ -56,15 +53,13 @@ const Portal = () => {
     }
    ,cellRenderer: p => <> {p.value}<span style={{ color: 'rgb(184, 184, 184)' }}>%</span>
    </> },
-    { headerName: 'Semester', field: 'semester', cellRenderer: semesterRendere },
+    { headerName: 'Semester', field: 'semester',flex: 0.9, cellRenderer: semesterRendere },
     { headerName: 'Request Status', field: 'requestStatus', cellRenderer: ReqStatusRenderer },
     { headerName: "LeaveId", field: "leave_id", hide: true,suppressToolPanel: true
    }
   ]);
 
   const gridRef = useRef();
-
-  /////////////////////////////////////////////////////
 
   const exportTableAsJson = () => {
 
@@ -109,7 +104,6 @@ const Portal = () => {
     });
   };
 
-///////////////////////////////////////////////////////
   const defaultColDef = {
     flex: 1,
     editable: false,
@@ -154,7 +148,6 @@ const Portal = () => {
 
   return (
     <div className="ag-theme-quartz">
-      <button onClick={exportTableAsJson}>exportTableAsJson</button>
       <AgGridReact
        ref={gridRef}
        rowSelection="multiple"
@@ -165,7 +158,14 @@ const Portal = () => {
      //   onRowSelected={onRowSelected}
    //     onCellValueChanged={onCellValueChanged}
       />
+
+
+      <div>
+      <button onClick={exportTableAsJson}>Mark Attendance</button>
+      </div>
     </div>
+
+    
   );
 
 };
