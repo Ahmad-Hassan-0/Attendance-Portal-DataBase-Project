@@ -76,17 +76,17 @@ const Portal = () => {
   
     const th_regId = sessionStorage.getItem('LoggedUserId');
   
-    const datetime = new Date();
-    const date = datetime.toISOString().slice(0, 10);
-    const time = datetime.toISOString().slice(11, 19);
+    var datetime = new Date();
+    const date = datetime.toLocaleDateString('en-CA');
+    var time = datetime.toISOString().slice(11, 19);
   
     gridRef.current.api.forEachNode(node => {
       const isSelected = node.isSelected() ? 'Present' : 'Absent';
       const rowData = node.data;
   
-        const { requestStatus, stuRegIds, leave_id } = rowData;
+        var { requestStatus, stuRegIds, leave_id } = rowData;
   
-      const rowDataWithVariables = {course_id, th_regId, isSelected, date, time, Attendance_type, stuRegIds, leave_id
+      var rowDataWithVariables = {course_id, th_regId, isSelected, date, time, Attendance_type, stuRegIds, leave_id
       };
      // console.log(Attendance_type);
   
@@ -118,9 +118,9 @@ const Portal = () => {
 
 const fetchTeacherRegisteredCourses = () =>{
 
-  const datetime = new Date();
-  const date = datetime.toISOString().slice(0, 10);
-  const th_regId = sessionStorage.getItem('LoggedUserId');
+  var datetime = new Date();
+  const date = datetime.toLocaleDateString('en-CA');
+  var th_regId = sessionStorage.getItem('LoggedUserId');
 
  // console.log('Fetching column from server');
   fetch(`http://localhost:3000/dashboard/getTeacherRegisteredCourses?th_regId=${th_regId}&att_date=${date}`)
@@ -165,12 +165,14 @@ const fetchTeacherRegisteredCourses = () =>{
   };
   
   const fetchStudentsData = () => {
-    const datetime = new Date();
-    const date = datetime.toISOString().slice(0, 10);
-    const th_regId = sessionStorage.getItem('LoggedUserId');
+    var datetime = new Date();
+    //var date = datetime.toISOString().slice(0, 10);
+    const date = datetime.toLocaleDateString('en-CA');
+    var th_regId = sessionStorage.getItem    ('LoggedUserId');
+
      console.log(course_id);
      console.log(th_regId);
-
+    
     //console.log('Fetching Students list from server');
     fetch(`http://localhost:3000/dashboard/getStudents?course_id=${course_id}&th_regId=${th_regId}&leave_date=${date}`)
     
