@@ -46,11 +46,11 @@ const Portal = () => {
   const [rowData, setRowData] = useState([]);
   const [colDefs, setColDefs] = useState([
     { headerName: 'Name', field: 'stu_name', headerCheckboxSelection: true, checkboxSelection: true },
-    { headerName: 'Status', field: 'requestStatus', cellRenderer: StatusRenderer },
+  //  { headerName: 'Status', field: 'requestStatus', cellRenderer: StatusRenderer },
     { headerName: 'Registration ID', field: 'stuRegIds' },
     { headerName: 'Attendance%', field: 'attendance_percentage',
     cellStyle: params => {
-      if (params.value == 100) {
+      if (params.value >= 100) {
         return { color: 'green' };
       } else if (params.value <= 75) {
         return { color: 'red' };
@@ -88,7 +88,7 @@ const Portal = () => {
   
       const rowDataWithVariables = {course_id, th_regId, isSelected, date, time, Attendance_type, stuRegIds, leave_id
       };
-      console.log(Attendance_type);
+     // console.log(Attendance_type);
   
       exportData.push(rowDataWithVariables);
     });
@@ -116,25 +116,29 @@ const Portal = () => {
   
   ///////////////////////////////////
 
+const fetchTeacherRegisteredCourses = () =>{
+
+  const datetime = new Date();
+  const date = datetime.toISOString().slice(0, 10);
+  const th_regId = sessionStorage.getItem('LoggedUserId');
+
+ // console.log('Fetching column from server');
+  fetch(`http://localhost:3000/dashboard/getTeacherRegisteredCourses?th_regId=${th_regId}&att_date=${date}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      return response.json();
+    })
+    .then(data => {
+      setExpansions(data); // Update the expansions state with the fetched data
+    })
+    .catch(error => console.error('Error fetching data:', error));
+}
+
   //// orignal2
   useEffect(() => {
-
-    const datetime = new Date();
-    const date = datetime.toISOString().slice(0, 10);
-    const th_regId = sessionStorage.getItem('LoggedUserId');
-
-    console.log('Fetching column from server');
-    fetch(`http://localhost:3000/dashboard/getTeacherRegisteredCourses?th_regId=${th_regId}&att_date=${date}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setExpansions(data); // Update the expansions state with the fetched data
-      })
-      .catch(error => console.error('Error fetching data:', error));
+    fetchTeacherRegisteredCourses();
   }, []);
 
   const [data, setData] = useState([]);
@@ -143,6 +147,8 @@ const Portal = () => {
   ///////////////////////////////////
 
   const thing = useCallback(() => {
+    fetchTeacherRegisteredCourses();
+    fetchStudentsData();
     window.alert("Attendance Marked");
   }, []);
 
@@ -157,15 +163,17 @@ const Portal = () => {
     lockPosition: true,
     headerCheckboxSelectionFilteredOnly: true
   };
-
-  useEffect(() => {
-
-    
+  
+  const fetchStudentsData = () => {
     const datetime = new Date();
     const date = datetime.toISOString().slice(0, 10);
+    const th_regId = sessionStorage.getItem('LoggedUserId');
+     console.log(course_id);
+     console.log(th_regId);
 
-    console.log('Fetching table list from server');
-    fetch(`http://localhost:3000/dashboard/getStudents?course_id=${course_id}&leave_date=${date}`)
+    //console.log('Fetching Students list from server');
+    fetch(`http://localhost:3000/dashboard/getStudents?course_id=${course_id}&th_regId=${th_regId}&leave_date=${date}`)
+    
       .then(response => {
         if (!response.ok) {
           throw new Error('Failed to fetch data');
@@ -174,7 +182,12 @@ const Portal = () => {
       })
       .then(data => setRowData(data))
       .catch(error => console.error('Error fetching data:', error));
+  }
+
+  useEffect(() => {
+    fetchStudentsData(); 
   }, []);
+
 
   const onRowSelected = useCallback(
     (event) => {
@@ -188,24 +201,62 @@ const Portal = () => {
     [],
   );
 
-  const onCellValueChanged = useCallback(
-    (event) => {
-      console.log(event); // access the entire event object
-      console.log(event.data.Name); // access and print the updated row data
-    },
-    [],
-  );
+
+  ////Orignal
+  // useEffect(() => {
+
+  //   fetchStudentsData(); 
+  //   const datetime = new Date();
+  //   const date = datetime.toISOString().slice(0, 10);
+
+  //   console.log('Fetching table list from server');
+  //   fetch(`http://localhost:3000/dashboard/getStudents?course_id=${course_id}&leave_date=${date}`)
+  //     .then(response => {
+  //       if (!response.ok) {
+  //         throw new Error('Failed to fetch data');
+  //       }
+  //       return response.json();
+  //     })
+  //     .then(data => setRowData(data))
+  //     .catch(error => console.error('Error fetching data:', error));
+  // }, []);
+
+  // const onRowSelected = useCallback(
+  //   (event) => {
+  //     window.alert(
+  //       'row ' +
+  //       event.node.data.Name +
+  //       ' selected = ' +
+  //       event.node.isSelected(),
+  //     );
+  //   },
+  //   [],
+  // );
+
+
+  // const onCellValueChanged = useCallback(
+  //   (event) => {
+  //     console.log(event); // access the entire event object
+  //     console.log(event.data.Name); // access and print the updated row data
+  //   },
+  //   [],
+  // );
 
   const handleRadioChange = (event) => {
     setAttendance_type(event.target.value);
-    console.log(Attendance_type)
+    //console.log(Attendance_type)
   };
 
 
   useEffect(() => {
-    console.log(course_id);
+    //console.log(course_id);
   }, [course_id]);
-  
+
+  const changeVar = (event) => {
+    course_id = event.target.value;
+    setCourse_id(event.target.value);
+    fetchStudentsData();
+  };
   
   return (
     <div className="ag-theme-quartz">
@@ -228,20 +279,29 @@ const Portal = () => {
 
         <div>
       
-        <select
-  name="Expsn" onChange={(event) => { setCourse_id(event.target.value);}}>
-  <option value="Null" disabled selected>Select Course</option>
+        {/* <select
+  name="Expsn" onChange={changeVar(event)}>
+  <option value="Nulll" disabled selected>Select Course</option>
   {expansions.map((expansion) => (
     <option key={expansion.courseIDS}
       value={expansion.courseIDS}>
       {expansion.courseOption}
     </option>
   ))}
-  </select>;
+  </select>; */}
+
+
+  <select name="Expsn" onChange={changeVar}>
+  <option value="Nulll" disabled selected>Select Course</option>
+  {expansions.map((expansion) => (
+    <option key={expansion.courseIDS} value={expansion.courseIDS}>
+      {expansion.courseOption}
+    </option>
+  ))}
+</select>;
     </div>
 
-        
-
+      
       <div>
     <input type="radio" id="Regular" name="att_radio_type" value="Regular" checked={Attendance_type === "Regular"}
     onChange={handleRadioChange}/>

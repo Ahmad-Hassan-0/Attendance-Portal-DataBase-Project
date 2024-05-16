@@ -118,8 +118,9 @@ app.post('/login', (req, res) => {
 
 app.get('/dashboard/getStudents', (req, res) => {
   
-  const course_id = req.query.course_id;
-  const leave_date = req.query.leave_date;
+  var course_id = req.query.course_id;
+  var leave_date = req.query.leave_date;
+  var th_regId = req.query.th_regId;
 
   // if (!leave_date || !course_id) {
   //   return res.status(400).send('Missing Data');
@@ -127,6 +128,7 @@ app.get('/dashboard/getStudents', (req, res) => {
   
   console.log("Received courseId is :", course_id);
   console.log("Received leave_date is:", leave_date);
+  console.log("Received th_regid is:", th_regId);
 
   const query1 = `
   SELECT 
@@ -140,26 +142,29 @@ FROM students
 LEFT JOIN (
   SELECT 
       studentregisteredcourses.stu_regId AS IDs,
-      (COALESCE(studentregisteredcourses.src_totalPresent, 0) / COALESCE(teacherregisteredcourses.trc_totalClassesTaken, 1)) * 100 AS attendance_percentage, 
+      ROUND((COALESCE(studentregisteredcourses.src_totalPresent, 0) / COALESCE(teacherregisteredcourses.trc_totalClassesTaken, 1)) * 100, 2) AS attendance_percentage, 
       COALESCE(leave_application.request_status, 'No Request') AS RQs,
       COALESCE(leave_application.leave_id) AS lids
   FROM studentregisteredcourses
   INNER JOIN students ON studentregisteredcourses.stu_regId = students.stu_regId
   LEFT JOIN leave_application ON students.stu_regId = leave_application.stu_regId
-      AND leave_application.leave_date = '2024-05-30'
+      AND leave_application.leave_date = ?
   LEFT JOIN teacherregisteredcourses ON studentregisteredcourses.course_id = teacherregisteredcourses.course_id
-      AND teacherregisteredcourses.th_regId = 'CS001'
-      AND teacherregisteredcourses.course_id = 'CSE101'
-  WHERE studentregisteredcourses.course_id = 'CSE101'
+      AND teacherregisteredcourses.th_regId = ?
+      AND teacherregisteredcourses.course_id = ?
+  WHERE studentregisteredcourses.course_id = ?
 ) AS sub_query ON students.stu_regId = sub_query.IDs
 WHERE sub_query.IDs IS NOT NULL;
 `;
 
-  db.query(query1, (error, results) => {
+  db.query(query1,[leave_date, th_regId,course_id,course_id] ,(error, results) => {
     res.json(results);
     console.log("dataSEnt")
+    console.log(results)
   });
 });
+
+
 ///////////////////////////////////////
 
 
@@ -275,7 +280,7 @@ WHERE sub_query.IDs IS NOT NULL;
 
 app.post('/dashboard', (req, res) => {
   const data = req.body.data;
- // console.log(data);
+  console.log(data);
 
   if (!Array.isArray(data)) {
     return res.status(400).send('Invalid data format');
@@ -338,7 +343,6 @@ app.post('/dashboard', (req, res) => {
       });
   });
 });
-
 
 app.listen(port, ()=> {
     console.log("listening");   
