@@ -34,14 +34,14 @@ api.setGridOption('serverSideDatasource', datasource);
 // }, []);
 
 
-// const onRowSelected = useCallback(
-//   (event) => {
-//     window.alert(
-//         console.log("Row Selected")
-//     );
-//   },
-//   [window],
-// );
+const onRowSelected = useCallback(
+  (event) => {
+    window.alert(
+        console.log("Row Selected")
+    );
+  },
+  [window],
+);
 
 
 // const onSelectionChanged = useCallback(

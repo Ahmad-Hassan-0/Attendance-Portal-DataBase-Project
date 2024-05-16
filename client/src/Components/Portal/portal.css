@@ -1,5 +1,5 @@
 .ag-theme-quartz {
-  height: 100vw;
+  height: 50vh;
   width: 100%;
 }
 .ag-theme-quartz .ag-header {
@@ -14,7 +14,7 @@
 
 .rejected-red-dot {
   background-color: red;
-}
+}s
 
 .live-blue-dot {
   background-color: blue;

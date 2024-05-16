@@ -80,9 +80,7 @@ app.post('/login', (req, res) => {
 }
 )
 
-// send
-app.get('/dashboard', (req, res) => {
-  //const query = 'SELECT * FROM atten';
+app.get('/dashboard/getStudents', (req, res) => {
   
   const query1 = `
   SELECT 
@@ -120,6 +118,20 @@ WHERE sub_query.IDs IS NOT NULL;
 
 ///////////////////////////////////////
 
+app.get('/dashboard/nothing', (req, res) => {
+
+  const query1 = ` SELECT Name, Status FROM atten `;
+
+  db.query(query1, (error, results) => {
+    res.json(results);
+    console.log(results)
+    console.log("CoursedataSEnt")
+  });
+});
+
+
+////////////////////////////////////////
+
 //into the Attendance table
 
 app.post('/dashboard', (req, res) => {
@@ -152,16 +164,6 @@ app.post('/dashboard', (req, res) => {
     res.send('Data inserted successfully');
   });
 });
-
-//////////////////////////////
-
-// app.post('/dashboard', (req,res) =>{
-    
-//   console.log(req.body);
-
-
-// }
-// )
 
 app.listen(port, ()=> {
     console.log("listening");   

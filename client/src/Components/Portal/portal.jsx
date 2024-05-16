@@ -9,12 +9,15 @@ import LoginPage from '../Login/login.jsx';
 
 const Portal = () => {
 
-  const [requestStatusVar, setReqStatusVar] = useState('');
+  const [expansions, setExpansions] = useState([]);
+
+  /////////////////////////////
+  //const [requestStatusVar, setReqStatusVar] = useState('');
+
   const ReqStatusRenderer = ({ value }) => {
     let dotClass;
-    setReqStatusVar(value)
-    console.log(value)
-    console.log("lag gyae");
+    //setReqStatusVar(value)
+    //console.log(value)
     if (value === 'none') {
       dotClass = 'none-grey-dot';
     } else if (value === 'Live') {
@@ -34,7 +37,8 @@ const Portal = () => {
   var type = sessionStorage.getItem('type'); // makeup or regular
   type = "Regular"
  // const course_id = sessionStorage.getItem('CourseId');
-  //
+
+  ////////////////////////////////////////
 
   const [rowData, setRowData] = useState([]);
   const [colDefs, setColDefs] = useState([
@@ -61,6 +65,8 @@ const Portal = () => {
 
   const gridRef = useRef();
 
+  ///////////////////////////////////
+  
   const exportTableAsJson = () => {
 
     const exportData = [];
@@ -89,7 +95,7 @@ const Portal = () => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ data: exportData }) // Wrap the data in an object
+      body: JSON.stringify({ data: exportData })
     })
     .then(response => {
       if (!response.ok) {
@@ -97,12 +103,38 @@ const Portal = () => {
       }
       // Handle successful response
       console.log('JSON data uploaded successfully');
+      thing();
     })
     .catch(error => {
-      // Handle error
       console.error('Error uploading JSON data:', error);
     });
   };
+  
+  ///////////////////////////////////
+
+  useEffect(() => {
+    console.log('Fetching column from server');
+    fetch('http://localhost:3000/dashboard/nothing')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setExpansions(data); // Update the expansions state with the fetched data
+      })
+      .catch(error => console.error('Error fetching data:', error));
+  }, []);
+
+  ///////////////////////////////////
+
+  const thing = useCallback(() => {
+    window.alert("Attendance Marked");
+  }, []);
+
+/////////////////////////////////////
+
 
   const defaultColDef = {
     flex: 1,
@@ -115,7 +147,7 @@ const Portal = () => {
 
   useEffect(() => {
     console.log('Fetching table list from server');
-    fetch('http://localhost:3000/dashboard')
+    fetch('http://localhost:3000/dashboard/getStudents')
       .then(response => {
         if (!response.ok) {
           throw new Error('Failed to fetch data');
@@ -163,6 +195,17 @@ const Portal = () => {
       <div>
       <button onClick={exportTableAsJson}>Mark Attendance</button>
       </div>
+
+
+     <h1>Expansions</h1>
+     <select name="Expsn">
+    <option value="All">Select Course</option>
+      {expansions.map(expansion => (
+        <option key={expansion.Name} value={expansion.Name}>{expansion.Name}</option>
+      ))} 
+    </select>
+
+
     </div>
 
     
@@ -172,7 +215,7 @@ const Portal = () => {
 
 const StatusRenderer = ({ value }) => {
   // Custom logic for rendering status
-  return <span>{value}</span>;
+  return <span>{}</span>;
 };
 
 const semesterRendere = ({ value }) => {
@@ -188,7 +231,6 @@ const semesterRendere = ({ value }) => {
   else if(value == 8) temp = "VIII";
   return <span>{temp}</span>;
 };
-
 
 Portal.propTypes = {
   // Define PropTypes if needed
