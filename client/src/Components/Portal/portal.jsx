@@ -14,6 +14,7 @@ const Portal = () => {
   /////////////////////////////
   //const [requestStatusVar, setReqStatusVar] = useState('');
 
+  // eslint-disable-next-line react/prop-types
   const ReqStatusRenderer = ({ value }) => {
     let dotClass;
     //setReqStatusVar(value)
@@ -32,10 +33,12 @@ const Portal = () => {
     return <span className={`dot ${dotClass}`}></span>;
   };
 
-  var course_id = sessionStorage.getItem('CourseId');
-  course_id = "CSE101";
-  var type = sessionStorage.getItem('type'); // makeup or regular
-  type = "Regular"
+  var [course_id, setCourse_id] = useState("Null");
+  var [Attendance_type, setAttendance_type] = useState("Regular");
+
+  // var course_id = sessionStorage.getItem('CourseId');
+  // course_id = "CSE101";
+  
  // const course_id = sessionStorage.getItem('CourseId');
 
   ////////////////////////////////////////
@@ -83,8 +86,9 @@ const Portal = () => {
   
         const { requestStatus, stuRegIds, leave_id } = rowData;
   
-      const rowDataWithVariables = {course_id, th_regId, isSelected, date, time, type, stuRegIds, leave_id
+      const rowDataWithVariables = {course_id, th_regId, isSelected, date, time, Attendance_type, stuRegIds, leave_id
       };
+      console.log(Attendance_type);
   
       exportData.push(rowDataWithVariables);
     });
@@ -112,9 +116,15 @@ const Portal = () => {
   
   ///////////////////////////////////
 
+  //// orignal2
   useEffect(() => {
+
+    const datetime = new Date();
+    const date = datetime.toISOString().slice(0, 10);
+    const th_regId = sessionStorage.getItem('LoggedUserId');
+
     console.log('Fetching column from server');
-    fetch('http://localhost:3000/dashboard/nothing')
+    fetch(`http://localhost:3000/dashboard/getTeacherRegisteredCourses?th_regId=${th_regId}&att_date=${date}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Failed to fetch data');
@@ -126,6 +136,9 @@ const Portal = () => {
       })
       .catch(error => console.error('Error fetching data:', error));
   }, []);
+
+  const [data, setData] = useState([]);
+
 
   ///////////////////////////////////
 
@@ -146,8 +159,13 @@ const Portal = () => {
   };
 
   useEffect(() => {
+
+    
+    const datetime = new Date();
+    const date = datetime.toISOString().slice(0, 10);
+
     console.log('Fetching table list from server');
-    fetch('http://localhost:3000/dashboard/getStudents')
+    fetch(`http://localhost:3000/dashboard/getStudents?course_id=${course_id}&leave_date=${date}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Failed to fetch data');
@@ -178,6 +196,17 @@ const Portal = () => {
     [],
   );
 
+  const handleRadioChange = (event) => {
+    setAttendance_type(event.target.value);
+    console.log(Attendance_type)
+  };
+
+
+  useEffect(() => {
+    console.log(course_id);
+  }, [course_id]);
+  
+  
   return (
     <div className="ag-theme-quartz">
       <AgGridReact
@@ -188,27 +217,42 @@ const Portal = () => {
         rowData={rowData}
         suppressRowClickSelection="true"
      //   onRowSelected={onRowSelected}
-   //     onCellValueChanged={onCellValueChanged}
+     //     onCellValueChanged={onCellValueChanged}
       />
-
-
       <div>
       <button onClick={exportTableAsJson}>Mark Attendance</button>
       </div>
 
 
      <h1>Expansions</h1>
-     <select name="Expsn">
-    <option value="All">Select Course</option>
-      {expansions.map(expansion => (
-        <option key={expansion.Name} value={expansion.Name}>{expansion.Name}</option>
-      ))} 
-    </select>
 
-
+        <div>
+      
+        <select
+  name="Expsn" onChange={(event) => { setCourse_id(event.target.value);}}>
+  <option value="Null" disabled selected>Select Course</option>
+  {expansions.map((expansion) => (
+    <option key={expansion.courseIDS}
+      value={expansion.courseIDS}>
+      {expansion.courseOption}
+    </option>
+  ))}
+  </select>;
     </div>
 
-    
+        
+
+      <div>
+    <input type="radio" id="Regular" name="att_radio_type" value="Regular" checked={Attendance_type === "Regular"}
+    onChange={handleRadioChange}/>
+    <label htmlFor="Regular">Regular</label>
+    <br/>
+    <input type="radio" id="Makeup" name="att_radio_type" value="Makeup" checked={Attendance_type === "Makeup"} onChange={handleRadioChange}
+    />
+  <label htmlFor="Makeup">Makeup</label>
+</div>
+
+    </div>
   );
 
 };

@@ -471,3 +471,70 @@ useEffect(() => {
      });
    };
    
+
+       {/* <select
+        name="Expsn" onChange={(event) => { setCourse_id(event.target.value);}}>
+        <option value="Null" disabled selected>Select Course</option>
+        {expansions.map((expansion) => (
+          <option key={expansion.course_id}
+            value={expansion.course_id}>
+            {expansion.courseIDS}
+          </option>
+        ))}
+        </select>; */}
+
+
+        {/* <select
+          name="Expsn"
+          value={course_id}
+          onChange={(event) => { setCourse_id(event.target.value); }}
+        >
+          <option value="Null" disabled>Select Course</option>
+          {expansions.map((expansion) => (
+            <option key={expansion.course_id} value={expansion.course_id}>
+              {expansion.courseIDS}
+            </option>
+          ))}
+        </select>; */}
+
+
+        {/* <h1>Expansions</h1>
+
+<select
+  name="Expsn" onChange={(event) => { setCourse_id(event.target.value);}}>
+  <option value="Null" disabled selected>Select Course</option>
+  {expansions.map((expansion) => (
+    <option key={expansion.course_id}
+      value={expansion.course_id}>
+      {expansion.courseIDS}
+    </option>
+  ))}
+  </select>;
+
+<div>
+<input type="radio" id="Regular" name="att_radio_type" value="Regular" checked={Attendance_type === "Regular"}
+onChange={handleRadioChange}/>
+<label htmlFor="Regular">Regular</label>
+<br/>
+<input type="radio" id="Makeup" name="att_radio_type" value="Makeup" checked={Attendance_type === "Makeup"} onChange={handleRadioChange}
+/>
+<label htmlFor="Makeup">Makeup</label>
+</div> */}
+
+
+
+//// orignal
+  // useEffect(() => {
+  //   console.log('Fetching column from server');
+  //   fetch('http://localhost:3000/dashboard/nothing')
+  //     .then(response => {
+  //       if (!response.ok) {
+  //         throw new Error('Failed to fetch data');
+  //       }
+  //       return response.json();
+  //     })
+  //     .then(data => {
+  //       setExpansions(data); // Update the expansions state with the fetched data
+  //     })
+  //     .catch(error => console.error('Error fetching data:', error));
+  // }, []);
