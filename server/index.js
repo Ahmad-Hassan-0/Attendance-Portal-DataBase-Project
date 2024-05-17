@@ -278,6 +278,7 @@ WHERE sub_query.IDs IS NOT NULL;
 // });
 
 
+////Orignal
 // app.post('/dashboard', (req, res) => {
 //   const data = req.body.data;
 //   console.log(data);
@@ -344,6 +345,87 @@ WHERE sub_query.IDs IS NOT NULL;
 //   });
 // });
 
+// Origanal plus Students total present increment
+// app.post('/dashboard', (req, res) => {
+//   const data = req.body.data;
+//   console.log(data);
+
+//   if (!Array.isArray(data)) {
+//     return res.status(400).send('Invalid data format');
+//   }
+
+//   const query = `
+//     INSERT INTO attendance (course_id, th_regid, att_status, att_date, att_timerecorded, att_type, stu_regId, leave_id)
+//     VALUES ?`;
+
+//   const values = data.map(item => [
+//     item.course_id,
+//     item.th_regId,
+//     item.isSelected,
+//     item.date,
+//     item.time,
+//     item.Attendance_type,
+//     item.stuRegIds,
+//     item.leave_id
+//   ]);
+
+//   // Run the insert query
+//   db.query(query, [values], (error, results) => {
+//     if (error) {
+//       console.error('Error inserting data into the database:', error);
+//       return res.status(500).send('Error inserting data into the database');
+//     }
+
+//     // Extract the unique combination of th_regId and course_id from data
+//     const uniqueCourses = [...new Set(data.map(item => `${item.th_regId}-${item.course_id}`))];
+//     const updateTeacherQueries = uniqueCourses.map(course => {
+//       const [th_regId, course_id] = course.split('-');
+//       return `
+//         UPDATE teacherregisteredcourses 
+//         SET trc_totalClassesTaken = trc_totalClassesTaken + 1 
+//         WHERE th_regId = "${th_regId}" 
+//         AND course_id = "${course_id}"`;
+//     });
+
+//     // Extract the unique students that were marked as present
+//     const presentStudents = data.filter(item => item.isSelected === 'Present');
+//     const uniqueStudentCourses = [...new Set(presentStudents.map(item => `${item.stuRegIds}-${item.course_id}`))];
+//     const updateStudentQueries = uniqueStudentCourses.map(course => {
+//       const [stuRegIds, course_id] = course.split('-');
+//       return `
+//         UPDATE studentregisteredcourses 
+//         SET src_totalPresent = src_totalPresent + 1 
+//         WHERE stu_RegId = "${stuRegIds}" 
+//         AND course_id = "${course_id}"`;
+//     });
+
+//     // Combine all update queries
+//     const allUpdateQueries = [...updateTeacherQueries, ...updateStudentQueries];
+
+//     // Execute all update queries
+//     const updatePromises = allUpdateQueries.map(query => {
+//       return new Promise((resolve, reject) => {
+//         db.query(query, (error, results) => {
+//           if (error) {
+//             reject(error);
+//           } else {
+//             resolve(results);
+//           }
+//         });
+//       });
+//     });
+
+//     // Wait for all updates to complete
+//     Promise.all(updatePromises)
+//       .then(() => {
+//         res.send('Data inserted and incremented successfully');
+//       })
+//       .catch(error => {
+//         console.error('Error incrementing:', error);
+//         res.status(500).send('Error incrementing');
+//       });
+//   });
+// });
 
 app.post('/dashboard', (req, res) => {
   const data = req.body.data;
@@ -368,63 +450,82 @@ app.post('/dashboard', (req, res) => {
     item.leave_id
   ]);
 
-  // Run the insert query
-  db.query(query, [values], (error, results) => {
+  db.beginTransaction(error => {
     if (error) {
-      console.error('Error inserting data into the database:', error);
-      return res.status(500).send('Error inserting data into the database');
+      console.error('Error starting transaction:', error);
+      return res.status(500).send('Error starting transaction');
     }
 
-    // Extract the unique combination of th_regId and course_id from data
-    const uniqueCourses = [...new Set(data.map(item => `${item.th_regId}-${item.course_id}`))];
-    const updateTeacherQueries = uniqueCourses.map(course => {
-      const [th_regId, course_id] = course.split('-');
-      return `
-        UPDATE teacherregisteredcourses 
-        SET trc_totalClassesTaken = trc_totalClassesTaken + 1 
-        WHERE th_regId = "${th_regId}" 
-        AND course_id = "${course_id}"`;
-    });
+    db.query(query, [values], (error, results) => {
+      if (error) {
+        return db.rollback(() => {
+          console.error('Error inserting data into the database:', error);
+          res.status(500).send('Error inserting data into the database');
+        });
+      }
 
-    // Extract the unique students that were marked as present
-    const presentStudents = data.filter(item => item.isSelected === 'Present');
-    const uniqueStudentCourses = [...new Set(presentStudents.map(item => `${item.stuRegIds}-${item.course_id}`))];
-    const updateStudentQueries = uniqueStudentCourses.map(course => {
-      const [stuRegIds, course_id] = course.split('-');
-      return `
-        UPDATE studentregisteredcourses 
-        SET src_totalPresent = src_totalPresent + 1 
-        WHERE stu_RegId = "${stuRegIds}" 
-        AND course_id = "${course_id}"`;
-    });
+      // Extract the unique combination of th_regId and course_id from data
+      const uniqueCourses = [...new Set(data.map(item => `${item.th_regId}-${item.course_id}`))];
+      const updateTeacherQueries = uniqueCourses.map(course => {
+        const [th_regId, course_id] = course.split('-');
+        return `
+          UPDATE teacherregisteredcourses 
+          SET trc_totalClassesTaken = trc_totalClassesTaken + 1 
+          WHERE th_regId = "${th_regId}" 
+          AND course_id = "${course_id}"`;
+      });
 
-    // Combine all update queries
-    const allUpdateQueries = [...updateTeacherQueries, ...updateStudentQueries];
+      // Extract the unique students that were marked as present
+      const presentStudents = data.filter(item => item.isSelected === 'Present');
+      const uniqueStudentCourses = [...new Set(presentStudents.map(item => `${item.stuRegIds}-${item.course_id}`))];
+      const updateStudentQueries = uniqueStudentCourses.map(course => {
+        const [stuRegIds, course_id] = course.split('-');
+        return `
+          UPDATE studentregisteredcourses 
+          SET src_totalPresent = src_totalPresent + 1 
+          WHERE stu_RegId = "${stuRegIds}" 
+          AND course_id = "${course_id}"`;
+      });
 
-    // Execute all update queries
-    const updatePromises = allUpdateQueries.map(query => {
-      return new Promise((resolve, reject) => {
-        db.query(query, (error, results) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(results);
-          }
+      // Combine all update queries
+      const allUpdateQueries = [...updateTeacherQueries, ...updateStudentQueries];
+
+      // Execute all update queries
+      const updatePromises = allUpdateQueries.map(query => {
+        return new Promise((resolve, reject) => {
+          db.query(query, (error, results) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(results);
+            }
+          });
         });
       });
-    });
 
-    // Wait for all updates to complete
-    Promise.all(updatePromises)
-      .then(() => {
-        res.send('Data inserted and incremented successfully');
-      })
-      .catch(error => {
-        console.error('Error incrementing:', error);
-        res.status(500).send('Error incrementing');
-      });
+      // Wait for all updates to complete
+      Promise.all(updatePromises)
+        .then(() => {
+          db.commit(error => {
+            if (error) {
+              return db.rollback(() => {
+                console.error('Error committing transaction:', error);
+                res.status(500).send('Error committing transaction');
+              });
+            }
+            res.send('Data inserted and incremented successfully');
+          });
+        })
+        .catch(error => {
+          db.rollback(() => {
+            console.error('Error updating:', error);
+            res.status(500).send('Error updating');
+          });
+        });
+    });
   });
 });
+
 
 app.listen(port, ()=> {
     console.log("listening");   
