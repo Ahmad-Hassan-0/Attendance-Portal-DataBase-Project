@@ -5,7 +5,22 @@ import 'ag-grid-community/styles/ag-theme-quartz.css';
 import './portal.css';
 import PropTypes from 'prop-types';
 import LoginPage from '../Login/login.jsx';
-
+import universityIcon from './university_icon.png'; 
+import { BiSearch } from "react-icons/bi";
+import { BiSolidDashboard } from "react-icons/bi";
+import { MdBookmarkAdded } from "react-icons/md";
+import { HiPaperClip } from "react-icons/hi2";
+import { RxCountdownTimer } from "react-icons/rx";
+import { GrNotes } from "react-icons/gr";
+import { TbSettings2 } from "react-icons/tb";
+import { MdLogout } from "react-icons/md";
+import { RiExpandUpDownFill } from "react-icons/ri";
+import { VscBellDot } from "react-icons/vsc";
+import { HiArrowPathRoundedSquare } from "react-icons/hi2";
+import { MdKeyboardArrowLeft } from "react-icons/md";
+import { MdKeyboardArrowRight } from "react-icons/md";
+import { SlCalender } from "react-icons/sl";
+import logo from './logo.png';
 
 const Portal = () => {
 
@@ -260,62 +275,201 @@ const fetchTeacherRegisteredCourses = () =>{
     fetchStudentsData();
   };
   
-  return (
+//   return (
+//     <div className="ag-theme-quartz">
+//       <AgGridReact
+//        ref={gridRef}
+//        rowSelection="multiple"
+//         defaultColDef={defaultColDef}
+//         columnDefs={colDefs}
+//         rowData={rowData}
+//         suppressRowClickSelection="true"
+//      //   onRowSelected={onRowSelected}
+//      //     onCellValueChanged={onCellValueChanged}
+//       />
+//       <div>
+//       <button onClick={exportTableAsJson}>Mark Attendance</button>
+//       </div>
+
+
+//      <h1>Expansions</h1>
+
+//         <div>
+      
+//         {/* <select
+//   name="Expsn" onChange={changeVar(event)}>
+//   <option value="Nulll" disabled selected>Select Course</option>
+//   {expansions.map((expansion) => (
+//     <option key={expansion.courseIDS}
+//       value={expansion.courseIDS}>
+//       {expansion.courseOption}
+//     </option>
+//   ))}
+//   </select>; */}
+
+
+//   <select name="Expsn" onChange={changeVar}>
+//   <option value="Nulll" disabled selected>Select Course</option>
+//   {expansions.map((expansion) => (
+//     <option key={expansion.courseIDS} value={expansion.courseIDS}>
+//       {expansion.courseOption}
+//     </option>
+//   ))}
+// </select>;
+//     </div>
+
+      
+//       <div>
+//     <input type="radio" id="Regular" name="att_radio_type" value="Regular" checked={Attendance_type === "Regular"}
+//     onChange={handleRadioChange}/>
+//     <label htmlFor="Regular">Regular</label>
+//     <br/>
+//     <input type="radio" id="Makeup" name="att_radio_type" value="Makeup" checked={Attendance_type === "Makeup"} onChange={handleRadioChange}
+//     />
+//   <label htmlFor="Makeup">Makeup</label>
+// </div>
+
+//     </div>
+//   );
+
+return (
+  <div className='main-division'>
+    <nav className="container">
+      <ul>
+        <li className='item1'>
+          <a href="#" className="logo">
+            <img src={universityIcon} />
+          </a>
+        </li>
+        <li className='item2'>
+          <a href="#">
+            <BiSearch size={24} className="icon1" />
+            <input className="search-field" type="text" placeholder="    Search" />
+          </a>
+        </li>
+        <li className='item3'>
+          <a href="#">
+            <BiSolidDashboard size={24} className="icon1" />
+            <span className="nav-item">Dashboard</span>
+          </a>
+        </li>
+        <li className='item4'>
+          <a href="#">
+            <MdBookmarkAdded size={24} className="icon1" />
+            <span className="nav-item">Mark Attendance</span>
+          </a>
+        </li>
+        <li className='item5'>
+          <a href="#">
+            <HiPaperClip size={24} className="icon1" />
+            <span className="nav-item">Leave Requests</span>
+          </a>
+        </li>
+        <li className='item6'>
+          <a href="#">
+            <RxCountdownTimer size={24} className="icon1" />
+            <span className="nav-item">Requests History</span>
+          </a>
+        </li>
+        <li className='item7'>
+          <a href="#">
+            <GrNotes size={24} className="icon1" />
+            <span className="nav-item">Attendance Report</span>
+          </a>
+        </li>
+        <li className='item8'>
+          <a href="#">
+            <TbSettings2 size={24} className="icon1" />
+            <span className="nav-item">Settings</span>
+          </a>
+        </li>
+        <li className='item9'>
+          <a href="#" className="logout">
+            <MdLogout size={24} className="icon1" />
+            <span className="nav-item">Log out</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div className='left-division'>
+      <h2 id='headone'>Good Afternoon Ahmad</h2> 
+      < VscBellDot size={24} id='iconbell' />
+      <TbSettings2 size={24} id="iconset" />
+      <h4 id='headtwo'>I saw people, waiting for yesterday to come</h4>
+      <select className='course-select'  name="Expsn" onChange={changeVar}>
+        <option value="Nulll" disabled selected>Select Course</option>
+        {expansions.map((expansion) => (
+        <option key={expansion.courseIDS} value={expansion.courseIDS}>
+          {expansion.courseOption}
+        </option>))}
+      </select>        
+      <select className='section-select'>
+      <option>Select Section</option>
+      </select>
+      
+      <div className='regular'>
+      <input  type="radio"  name="att_radio_type" value="Regular" checked={Attendance_type === "Regular"} onChange={handleRadioChange} />
+      <label id='text' htmlFor="Regular">Regular</label>       
+      </div>
+      
+      <div className='makeup'>
+      <input type="radio" name="att_radio_type" value="Makeup" checked={Attendance_type === "Makeup"} onChange={handleRadioChange} />
+      <label htmlFor="Makeup">Makeup</label>
+      </div>
+
+      <div className='update'>
+      <h4 id='headthree'>Update</h4>
+      <HiArrowPathRoundedSquare id='iconupdate' />
+      </div>
+
+    </div>
+
+
+    <div className='right-division'>
+    </div>
+
+    <div className="top-division">
+    </div>
+
+    <div className="bottom-division">
+    <MdKeyboardArrowLeft size={20} className='leftarrow'/>
+    <SlCalender size={16} className='calender' />
+    <h5 className='datetext'>    Today 23 May 2024</h5>
+    <MdKeyboardArrowRight size={20} className='rightarrow'/>
+    <img src={logo} alt="percentage" className="percent" />
+    <div className="attendance-container">
+      <h5 className='present'>Present</h5>
+      <h5 className='total'>Total</h5>
+      <h5 >Absent</h5>
+      <h5>50</h5>
+      <h5>54</h5>
+      <h5>4</h5>
+      </div>
+      
+    <div className="date-container">
+      <h5 >Course Code:</h5>
+      <h5 className='date-con'>SE40283</h5>
+      <h5 >Saved Time & Date:</h5>
+      <h5 className='date-con'>No record found</h5>
+      <h5 >Current Time & Date:</h5>
+      <h5 className='date-con'>12:00 | 12/9/2023</h5>
+    </div>
+  <button className='attend-button' onClick={exportTableAsJson}>Mark Attendance</button>
+    </div>
+
     <div className="ag-theme-quartz">
       <AgGridReact
-       ref={gridRef}
-       rowSelection="multiple"
+        ref={gridRef}
+        rowSelection="multiple"
         defaultColDef={defaultColDef}
         columnDefs={colDefs}
         rowData={rowData}
         suppressRowClickSelection="true"
-     //   onRowSelected={onRowSelected}
-     //     onCellValueChanged={onCellValueChanged}
       />
-      <div>
-      <button onClick={exportTableAsJson}>Mark Attendance</button>
-      </div>
-
-
-     <h1>Expansions</h1>
-
-        <div>
-      
-        {/* <select
-  name="Expsn" onChange={changeVar(event)}>
-  <option value="Nulll" disabled selected>Select Course</option>
-  {expansions.map((expansion) => (
-    <option key={expansion.courseIDS}
-      value={expansion.courseIDS}>
-      {expansion.courseOption}
-    </option>
-  ))}
-  </select>; */}
-
-
-  <select name="Expsn" onChange={changeVar}>
-  <option value="Nulll" disabled selected>Select Course</option>
-  {expansions.map((expansion) => (
-    <option key={expansion.courseIDS} value={expansion.courseIDS}>
-      {expansion.courseOption}
-    </option>
-  ))}
-</select>;
     </div>
-
-      
-      <div>
-    <input type="radio" id="Regular" name="att_radio_type" value="Regular" checked={Attendance_type === "Regular"}
-    onChange={handleRadioChange}/>
-    <label htmlFor="Regular">Regular</label>
-    <br/>
-    <input type="radio" id="Makeup" name="att_radio_type" value="Makeup" checked={Attendance_type === "Makeup"} onChange={handleRadioChange}
-    />
-  <label htmlFor="Makeup">Makeup</label>
-</div>
-
-    </div>
-  );
+  </div>
+);
 
 };
 

@@ -12,18 +12,33 @@ app.use(cors())
 app.use(bodyParser.json());
 
 const port = 3000;
-const db = mysql.createConnection({
-    user: 'root',
-    host: 'localhost',
-    password: '', 
-    database: 'air_attendance_portal_byted',
-})
+// const db = mysql.createConnection({
+//     user: 'root',
+//     host: 'localhost',
+//     password: '', 
+//     database: 'air_attendance_portal_byted',
+// })
 
 app.get('/', 
   (req, res) => {
     res.send(' <h1> This is the server <h1>');
   } 
 );
+
+const db = mysql.createConnection({
+  user: 'root',
+  host: 'localhost',
+  password: '', 
+  database: 'air_attendance_portal_byted',
+});
+
+db.connect((err) => {
+  if (err) {
+      console.error('Error connecting to the database:', err.message);
+  } else {
+      console.log('Connected to the database successfully.');
+  }
+});
 
 app.post('/register', (req, res) => {
     const setEmail = req.body.Email
