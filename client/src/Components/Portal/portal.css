@@ -13,10 +13,11 @@ body {
 
 .ag-theme-quartz {
   position: absolute;
-  width: 78vw;
+  width: 75vw;
   height: 66.25vh;
-  left: 5vw;
+  left: 6vw;
   top: 16vw;
+
 }
 
 nav:hover ~ .ag-theme-quartz {
@@ -255,16 +256,16 @@ nav:hover ~ .left-division {
 
 .right-division {
   position: absolute;
-  top: 0;
+  top: 1vw;
   left: 43vw;
-  width: 40vw;
-  height: 33.65vh;
+  width: 38vw;
+  height: 13vw;
 }
 
 .top-division {
   position: absolute;
   top: 0;
-  left: 83vw;
+  left: 82.5vw;
   width: 17vw;
   height: 44vh;
   transition: left 1s;
@@ -272,12 +273,17 @@ nav:hover ~ .left-division {
 
 .bottom-division {
   position: absolute;
-  top: 20.9vw;
-  left: 83vw;
+  top: 24vw;
+  left: 82vw;
   width: 17vw;
   height: 56vh;
   transition: left 1s;
   background: #FDFDFD;
+}
+
+.percentTable{
+  width: 90%;
+  
 }
 
 #headone {
@@ -320,20 +326,20 @@ nav:hover ~ .left-division {
   width: 15vw;
   height: 2.65vw;
   margin-left: 1vw;
-  margin-top: 1vw;
+  margin-top: 2vw;
   display: inline;
 }
 
 nav:hover ~ .left-division .course-select {
-  width: 25vw;
+  width: 30vw;
 }
 
 nav:hover ~ .left-division .section-select {
-  width: 13vw;
+  width: 20vw;
 }
 
 nav:hover ~ .left-division #iconbell {
-  margin-left: 4vw;
+  margin-left: 5vw;
 }
 
 #headthree {
@@ -347,33 +353,6 @@ nav:hover ~ .left-division #iconbell {
   margin-top: 1vw;
 }
 
-.regular {
-  display: inline-block;
-  margin-left: 3vw;
-  bottom: 0.5vw;
-  justify-content: center;
-  position: relative;
-  width: 8vw;
-  height: 2.65vw;
-  color: white;
-  background: #1D2254;
-  border: 1.3px solid #F3F3F3;
-  border-radius: 6px 0px 0px 6px;
-}
-
-.makeup {
-  display: inline-block;
-  display: inline-block;
-  bottom: 0.5vw;
-  justify-content: center;
-  position: relative;
-  width: 8vw;
-  height: 2.65vw;
-  color: #1D2254;
-  background: #ffffff;
-  border: 1.3px solid #F3F3F3;
-  border-radius: 0px 6px 6px 0px;
-}
 
 nav:hover ~ .left-division .regular {
   width: 5vw;
@@ -442,16 +421,210 @@ nav:hover ~ .left-division .makeup {
 }
 
 .attend-button {
+  padding: 1vw 3.5vw 1vw 3.5vw;
+  border-radius: 10px;
+  border-color: transparent;
+  color: white;
+  background-color: #1D2254;
+  align-self: center;
+  margin: 3vw 1vw 1vw 1.8vw; 
+}
+
+
+  .div {
+    border-radius: 6px;
+    box-shadow: 0px -1px 2.5px 0px rgba(0, 0, 0, 0.25);
+    background-color: #1d2254;
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    width: 100%;
+    height: 100%;
+    padding: 12px 6px;
+  }
+  @media (max-width: 991px) {
+    .div {
+      margin-top: 20px;
+    }
+  }
+  .img {
+    aspect-ratio: 0.5;
+    object-fit: auto;
+    object-position: center;
+    width: 6px;
+    stroke-width: 2px;
+    stroke: #fff;
+    border-color: rgba(255, 255, 255, 1);
+    border-style: solid;
+    border-width: 2px;
+    align-self: stretch;
+    margin: auto 0;
+  }
+  .div-2 {
+    border-radius: 4px;
+    box-shadow: 0px -1px 2.5px 0px rgba(0, 0, 0, 0.25);
+    background-color: #fff;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 7px 10px 16px;
+  }
+  .div-3 {
+    display: flex;
+    gap: 20px;
+    font-size: 1.2vw;
+    color: #000;
+    justify-content: space-between;
+  }
+  .div-4 {
+    font-family: Manrope, sans-serif;
+  }
+  .div-5 {
+    display: flex;
+    flex-direction: column;
+  }
+  .img-2 {
+    aspect-ratio: 1;
+    object-fit: auto;
+    object-position: center;
+    width: 6px;
+    align-self: end;
+  }
+  .div-6 {
+    font-family: Manrope, sans-serif;
+  }
+  .div-7 {
+    justify-content: center;
+    border-radius: 2px;
+    box-shadow: 0px -1px 2.5px 0px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    align-self: start;
+    margin-top: 5px;
+    color: #7d7d7d;
+    white-space: nowrap;
+    padding: 1px 5px;
+    font: 0.8vw Manrope, sans-serif;
+  }
+  @media (max-width: 991px) {
+    .div-7 {
+      white-space: initial;
+    }
+  }
+  .div-8 {
+    color: #7d7d7d;
+    margin-top: 7px;
+    font: 500 0.7vw Manrope, sans-serif;
+  }
+  @media (max-width: 991px) {
+    .div-8 {
+      margin-right: 10px;
+    }
+  }
+  .div-9 {
+    display: flex;
+    margin-top: 6px;
+    width: 100%;
+    gap: 20px;
+    font-weight: 500;
+    justify-content: space-between;
+  }
+  .div-10 {
+    color: #949494;
+    align-self: start;
+    margin-top: 15px;
+    font: 0.8vw Manrope, sans-serif;
+  }
+  .div-11 {
+    display: flex;
+    gap: 9px;
+    font-size: 0.8vw;
+    color: #fff;
+    white-space: nowrap;
+  }
+  @media (max-width: 991px) {
+    .div-11 {
+      white-space: initial;
+    }
+  }
+  .div-12 {
+    font-family: Manrope, sans-serif;
+    justify-content: center;
+    border-radius: 2px;
+    box-shadow: 0px -1px 2.5px 0px rgba(0, 0, 0, 0.1);
+    background-color: #55aa85;
+    padding: 5px 12px;
+  }
+  @media (max-width: 991px) {
+    .div-12 {
+      white-space: initial;
+    }
+  }
+  .div-13 {
+    font-family: Manrope, sans-serif;
+    justify-content: center;
+    border-radius: 2px;
+    box-shadow: 0px -1px 2.5px 0px rgba(0, 0, 0, 0.1);
+    background-color: #ca0000;
+    padding: 5px 12px;
+  }
+  @media (max-width: 991px) {
+    .div-13 {
+      padding-right: 20px;
+      white-space: initial;
+    }
+  }
+
+
+/* Base styles for both boxes */
+/* Base styles for both boxes */
+/* Base styles for both boxes */
+.box-label {
+  /* display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative; */
+  padding-right: 3vw;
+  padding-left: 3vw;
+  padding-top: 1vw;
+  padding-bottom: 1vw;
+  margin: -20px;
+  transition: background-color 0.3s, color 0.3s; 
   display: inline-block;
   margin-left: 1vw;
   margin-top: 1vw;
   bottom: 0.5vw;
   justify-content: center;
   position: relative;
-  width: 15svw;
-  height: 2.65vw;
-  color: white;
-  background: #1D2254;
+  color:  #1D2254;;
   border: 1.3px solid #F3F3F3;
   border-radius: 6px;
-}/*# sourceMappingURL=portal.css.map */
+  display: inline-block;
+  position: static;
+}
+
+/* Hide the radio buttons but keep them accessible */
+input[type="radio"] {
+  opacity: 0;
+  position: absolute;
+  pointer-events: none; /* Prevent the radio buttons from interfering with the labels */
+  display: inline-block;
+  position: static;
+}
+
+/* Styles for the selected box */
+input[type="radio"]:checked + .box-label {
+  background-color: #1D2254;;
+  color: white; /* Changed color for better contrast */
+
+}
+
+ .regular,.makeup {
+  margin-top: 1vw;
+  justify-self:center;
+  display: inline-block;
+  position: static;
+  border-radius: 6px 0px 0px 6px;
+}

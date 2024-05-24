@@ -21,6 +21,7 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { SlCalender } from "react-icons/sl";
 import logo from './logo.png';
+import table from './table.png';
 
 const Portal = () => {
 
@@ -396,9 +397,9 @@ return (
       <h2 id='headone'>Good Afternoon Ahmad</h2> 
       < VscBellDot size={24} id='iconbell' />
       <TbSettings2 size={24} id="iconset" />
-      <h4 id='headtwo'>I saw people, waiting for yesterday to come</h4>
+      <h4 id='headtwo'>Welcome to Air University Attendance Portal</h4>
       <select className='course-select'  name="Expsn" onChange={changeVar}>
-        <option value="Nulll" disabled selected>Select Course</option>
+        <option value="Nulll">Select Course</option>
         {expansions.map((expansion) => (
         <option key={expansion.courseIDS} value={expansion.courseIDS}>
           {expansion.courseOption}
@@ -406,17 +407,43 @@ return (
       </select>        
       <select className='section-select'>
       <option>Select Section</option>
+      <option>A</option>
+      <option>B</option>
       </select>
       
-      <div className='regular'>
+      {/* <div className='regular'>
       <input  type="radio"  name="att_radio_type" value="Regular" checked={Attendance_type === "Regular"} onChange={handleRadioChange} />
       <label id='text' htmlFor="Regular">Regular</label>       
       </div>
-      
+      ORG
       <div className='makeup'>
       <input type="radio" name="att_radio_type" value="Makeup" checked={Attendance_type === "Makeup"} onChange={handleRadioChange} />
       <label htmlFor="Makeup">Makeup</label>
-      </div>
+      </div> */}
+
+<div className='regular'>
+      <input 
+        type="radio" 
+        id="regular" 
+        name="att_radio_type" 
+        value="Regular" 
+        checked={Attendance_type === "Regular"} 
+        onChange={handleRadioChange} 
+      />
+      <label htmlFor="regular" className='box-label'>Regular</label>
+    </div>
+<div className='makeup'>
+      <input 
+        type="radio" 
+        id="makeup" 
+        name="att_radio_type" 
+        value="Makeup" 
+        checked={Attendance_type === "Makeup"} 
+        onChange={handleRadioChange} 
+      />
+      <label htmlFor="makeup" className='box-label'>Makeup</label>
+    </div>
+       
 
       <div className='update'>
       <h4 id='headthree'>Update</h4>
@@ -425,11 +452,55 @@ return (
 
     </div>
 
-
     <div className='right-division'>
+
+    <div className="div">
+        <img
+          loading="lazy"
+          src="https://cdn.builder.io/api/v1/image/assets/TEMP/9c5e6d0cff2d42ab7ef6bdac292dc3e8460850eeef2f1971de6fd5bc9f3596d5?"
+          className="img"
+        />
+        <div className="div-2">
+          <div className="div-3">
+            <div className="div-4">Ahmad Hassan</div>
+            <div className="div-5">
+              <img
+                loading="lazy"
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/6c4e98e6c53a41bfa20bb0c822e4c1eace5d8db0b0cb924db8b387400226c5e5?"
+                className="img-2"
+              />
+              <div className="div-6">Mother Sickness</div>
+            </div>
+          </div>
+          <div className="div-7">221775</div>
+          <div className="div-8">
+            I hope this message finds you well. Unfortunately, I must inform you
+            that my mother is unwell today, requiring my immediate attention and
+            care. Consequently, I am unable to attend university. I assure you
+            of my commitment to catch up on any missed work promptly and provide
+            necessary documentation. Your understanding in this matter is
+            greatly appreciated.
+          </div>
+          <div className="div-9">
+            <div className="div-10">12:00PM | 12/9/2023</div>
+            <div className="div-11">
+              <div className="div-12">Accept</div>
+              <div className="div-13">Reject</div>
+            </div>
+          </div>
+        </div>
+        <img
+          loading="lazy"
+          src="https://cdn.builder.io/api/v1/image/assets/TEMP/dfbe45d9ca76a1ee5064f4660e1ce3273ae007e14b709aaaf559bd42d19f0192?"
+          className="img"
+        />
+      </div>
+    
+
     </div>
 
     <div className="top-division">
+    <img src={table} alt="percentage" className="percentTable" />
     </div>
 
     <div className="bottom-division">
@@ -479,7 +550,7 @@ const StatusRenderer = ({ value }) => {
 };
 
 const semesterRendere = ({ value }) => {
-  var temp = "WTF";
+  var temp = "I";
 
   if(value === 1) temp = "I";
   else if(value == 2) temp = "II";

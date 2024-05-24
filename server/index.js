@@ -5,10 +5,10 @@ const app = express();
 const mysql = require('mysql')
 const cors = require('cors')
 const fs = require('fs');
-
+  
 
 app.use(express.json())
-app.use(cors())
+app.use(cors ())
 app.use(bodyParser.json());
 
 const port = 3000;
