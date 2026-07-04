@@ -37,6 +37,14 @@ The interface prioritizes clarity, utilizing a structured sidebar, real-time sta
   <em>Figure 1: The primary Teacher Portal Dashboard displaying student lists, attendance percentages, and current leave application statuses.</em>
 </p>
 
+### Login Interface
+
+<p align="center">
+  <img src="docs/assets/portal_login.webp" alt="Teacher Login Portal" width="100%" style="border-radius: 8px; border: 1px solid #e0e0e0; box-shadow: 0 4px 12px rgba(0,0,0,0.05);" />
+  <br />
+  <em>Figure 2: The secure Teacher Login interface for portal authentication.</em>
+</p>
+
 ---
 
 ##  Architecture Overview
@@ -122,10 +130,20 @@ sequenceDiagram
 
 The core database design is modeled to reflect real-world university relationships: Departments house Courses; Teachers teach registered Courses; Students register for Courses; and Attendance is logged against daily classes, with optional references to Leave Applications.
 
+### Database Entity Relationship Diagram
+
 <p align="center">
-  <img src="docs/assets/database_erd.webp" alt="Database Entity Relationship Diagram" width="100%" style="border-radius: 8px; border: 1px solid #e0e0e0; box-shadow: 0 4px 12px rgba(0,0,0,0.05);" />
+  <img src="docs/assets/Database.png" alt="Database Entity Relationship Diagram" width="100%" style="border-radius: 8px; border: 1px solid #e0e0e0; box-shadow: 0 4px 12px rgba(0,0,0,0.05);" />
   <br />
-  <em>Figure 2: Relational Schema showing primary/foreign key connections and referential constraints in phpMyAdmin.</em>
+  <em>Figure 3: Relational Schema showing primary/foreign key connections and referential constraints.</em>
+</p>
+
+### Handwritten ERD Diagram
+
+<p align="center">
+  <img src="docs/assets/ERD - HandWritten.png" alt="Handwritten ERD Diagram" width="100%" style="border-radius: 8px; border: 1px solid #e0e0e0; box-shadow: 0 4px 12px rgba(0,0,0,0.05);" />
+  <br />
+  <em>Figure 4: Hand-drawn Entity Relationship Diagram illustrating conceptual database relationships.</em>
 </p>
 
 ### Database Table Glossary
@@ -227,6 +245,20 @@ WHERE stu_regId = ? AND course_id = ?;
 ```
 </details>
 
+### Query Results Preview
+
+<p align="center">
+  <img src="docs/assets/query - 1.png" alt="SQL Query Result 1" width="100%" style="border-radius: 8px; border: 1px solid #e0e0e0; box-shadow: 0 4px 12px rgba(0,0,0,0.05);" />
+  <br />
+  <em>Figure 5: Sample query execution result demonstrating database operations.</em>
+</p>
+
+<p align="center">
+  <img src="docs/assets/query - 2.png" alt="SQL Query Result 2" width="100%" style="border-radius: 8px; border: 1px solid #e0e0e0; box-shadow: 0 4px 12px rgba(0,0,0,0.05);" />
+  <br />
+  <em>Figure 6: Additional query execution result showcasing database output.</em>
+</p>
+
 ---
 
 ##  Repository Structure
@@ -241,9 +273,13 @@ The directory organization is configured to keep assets, backend logic, styleshe
 │   └── register.css                      # Registration views
 ├── docs/
 │   └── assets/                           # Presentation visuals & diagrams
-│       ├── database_erd.webp             # Relational Database Schema
+│       ├── Database.png                  # Relational Database Schema
+│       ├── ERD - HandWritten.png         # Hand-drawn ERD diagram
 │       ├── portal_dashboard.webp         # Teacher Portal Screenshot
-│       └── project_banner.webp           # Behance Presentation Header Banner
+│       ├── portal_login.webp             # Login Portal Screenshot
+│       ├── project_banner.webp           # Behance Presentation Header Banner
+│       ├── query - 1.png                # Sample SQL query result 1
+│       └── query - 2.png                # Sample SQL query result 2
 ├── images/                               # Web interface image assets
 │   ├── google_logo.png
 │   ├── login_background.jpg
@@ -306,5 +342,3 @@ To maintain clean repository standards, new contributions are welcomed under the
 * Pull requests must be fully documented, stating what adjustments were made and linking back to the relevant system flow or module.
 * Collaborative feedback and UI designs are contributed in partnership with **Nimra Marrium**.
 * Database schema structure, documentation, and reporting are contributed in partnership with **Beenish Tasaffar**.
-
-
